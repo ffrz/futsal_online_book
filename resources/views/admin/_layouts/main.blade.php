@@ -15,7 +15,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
   @yield('headstyles')
-  @vite(['resources/css/app.css', 'resources/css/app.js'])
+  @vite([])
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed layout-footer-fixed dropdown-legacy">
   <div class="wrapper">
