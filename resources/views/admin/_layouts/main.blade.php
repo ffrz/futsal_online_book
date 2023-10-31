@@ -15,7 +15,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
   @yield('headstyles')
-  @vite('resources/css/admin.css')
+  @vite(['resources/css/app.css', 'resources/css/app.js'])
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed layout-footer-fixed dropdown-legacy">
   <div class="wrapper">
@@ -34,7 +34,6 @@
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('dist/js/adminlte.js') }}"></script>
   <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
-  @vite('resources/js/admin.js')
 </body>
 
 </html>
