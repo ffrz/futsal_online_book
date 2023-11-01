@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Public\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -18,33 +20,42 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $user = Auth::user();
-    if (!$user) {
+    if (!$user)
         return redirect(route('login'));
-    }
-
-    if ($user->group_id == 1 || $user->group_id == 2) {
+    if ($user->group_id == 1 || $user->group_id == 2)
         return redirect(route('admin.dashboard'));
-    }
-    return view('welcome');
+    return view('public.home');
 })->name('home');
 
-Route::controller(AuthController::class)->prefix('auth')->group(function () {
+Route::middleware(['guest'])->controller(AuthController::class)->prefix('auth')->group(function () {
     Route::get('login', 'login')->name('login');
     Route::post('process-login', 'processLogin')->name('process-login');
-    
+
     Route::get('register', 'register')->name('register');
     Route::post('process-registration', 'processRegistration')->name('process-registration');
     Route::get('registration-success', 'registrationSuccess')->name('registration-success');
 
     Route::get('forgot-password', 'forgotPassword')->name('forgot-password');
-    Route::post('recover-password', 'recoverPassword')->name('recover-password');    
+    Route::post('recover-password', 'recoverPassword')->name('recover-password');
     Route::get('reset-password-request-sent', 'resetPasswordRequestSent')->name('password.reset');
-
-    Route::get('logout', 'logout')->name('logout');
 });
 
-Route::prefix('admin')->group(function(){
-    Route::controller(DashboardController::class)->prefix('dashboard')->group(function() {
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('ajax/users', [UserController::class, 'userlist'])->name('ajax.users');
+
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
         Route::get('', 'index')->name('admin.dashboard');
+    });
+
+    Route::controller(UserController::class)->prefix('users')->group(function () {
+        Route::get('', 'index')->name('admin.users.index');
+        Route::get('add', 'add')->name('admin.users.add');
+        Route::get('edit', 'edit')->name('admin.users.edit');
+    });
+    Route::controller(UserGroupController::class)->prefix('user-groups')->group(function () {
+        Route::get('', 'index')->name('admin.user-groups.index');
+        Route::get('edit/{id}', 'edit')->name('admin.user-groups.edit');
     });
 });

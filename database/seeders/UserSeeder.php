@@ -34,5 +34,7 @@ class UserSeeder extends Seeder
             'group_id' => 3,
             'password' => Hash::make('12345'),
         ]);
+
+        User::factory(100)->create();
     }
 }
