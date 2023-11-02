@@ -27,13 +27,20 @@
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar nav-legacy nav-compact flex-column nav-collapse-hide-child"
         data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item menu-open">
-          <a href="{{ route('admin.dashboard') }}" class="nav-link active">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
+        <li class="nav-item">
+          <a href="{{ route('admin.dashboard') }}" class="nav-link">
+            <i class="nav-icon fas fa-chart-line"></i>
             <p>Dashboard</p>
           </a>
         </li>
         <li class="nav-item">
+          <a href="{{ route('admin.fields.index') }}"
+            class="nav-link {{ Str::startsWith('/' . request()->route()->uri, URL::route('admin.fields.index', [], false)) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-vector-square"></i>
+            <p>Lapangan</p>
+          </a>
+        </li>
+        {{-- <li class="nav-item">
           <a href="{{ route('home') }}" class="nav-link">
             <i class="nav-icon fas fa-th"></i>
             <p>
@@ -68,7 +75,7 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> --}}
         <li class="nav-header">Pengguna dan Grup</li>
         <li class="nav-item">
           <a href="{{ route('admin.users.index') }}"

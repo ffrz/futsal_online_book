@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FieldController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Public\AuthController;
@@ -52,10 +53,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::controller(UserController::class)->prefix('users')->group(function () {
         Route::get('', 'index')->name('admin.users.index');
         Route::get('add', 'add')->name('admin.users.add');
-        Route::get('edit', 'edit')->name('admin.users.edit');
+        Route::get('edit/{id}', 'edit')->name('admin.users.edit');
+        Route::post('save', 'save')->name('admin.users.save');
     });
     Route::controller(UserGroupController::class)->prefix('user-groups')->group(function () {
         Route::get('', 'index')->name('admin.user-groups.index');
         Route::get('edit/{id}', 'edit')->name('admin.user-groups.edit');
+        Route::post('save', 'save')->name('admin.user-groups.save');
+    });
+    Route::controller(FieldController::class)->prefix('fields')->group(function () {
+        Route::get('', 'index')->name('admin.fields.index');
+        Route::get('add', 'add')->name('admin.fields.add');
+        Route::get('edit/{id}', 'edit')->name('admin.fields.edit');
+        Route::post('save', 'save')->name('admin.fields.save');
     });
 });

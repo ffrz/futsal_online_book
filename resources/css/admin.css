@@ -2,3 +2,15 @@ hr.nav-separator {
     margin: 0;
     border-color: #777;
 }
+
+.nav-legacy.nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #5a5a5a;
+}
+
+.card-header {
+    padding: 0.1rem 0;
+}
+
+.card-header>* {
+    margin:0.75rem 1.25rem;
+}

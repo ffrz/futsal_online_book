@@ -10,9 +10,9 @@
         <a class="nav-link" href="{{ $back['url'] }}" title="{{ $back['title'] }}"><i class="fa fa-arrow-left"></i></a>
       </li>
     @endif
-    <li class="nav-item">
+    {{-- <li class="nav-item">
       <a href="#" class="nav-link">@yield('title')</a>
-    </li>
+    </li> --}}
     {{-- <li class="nav-item d-none d-sm-inline-block">
       <a href="#" class="nav-link">Home</a>
     </li>

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
   @yield('headstyles')
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
   @vite(['resources/css/admin.css'])
 </head>
 
@@ -26,8 +27,32 @@
   </div>
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
   @yield('footscripts')
   <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+  <script>
+    @if ($msg = session('flash-message'))
+      toastr.options = {
+        "closeButton": true,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+      $(document).ready(function onDocumentReady() {
+        toastr['{{ $msg[0] }}']('{{ $msg[1] }}', '{{ isset($msg[2]) ? $msg[2] : '' }}');
+      });
+    @endif
+  </script>
   @yield('footscript')
 </body>
 
