@@ -1,33 +1,18 @@
-<?php $title = isset($data['id']) ? 'Edit Pengguna' : 'Tambah Pengguna'; ?>
+
 @extends('admin._layouts.main')
-@section('title', $title)
+@section('title', $title = isset($data['id']) ? 'Edit Pengguna' : 'Tambah Pengguna')
 @include('admin._components.datatable-styles')
 @section('content')
   <div class="content-wrapper">
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>{{ $title }}</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Pengguna</a></li>
-              <li class="breadcrumb-item active">{{ $title }}</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
+    @include('admin._components.content-header', [
+        'title' => $title,
+        'breadcrumbItems' => ['home', 'users.index', empty($data['id']) ? 'users.add' : 'users.edit'],
+    ])
     <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Nama</h3>
-              </div>
+            <div class="card with-border-top">
               <form method="post" action="{{ route('admin.users.save') }}">
                 @csrf
                 <input type="hidden" id="{{ isset($data['id']) ? $data['id'] : '' }}">
@@ -53,8 +38,9 @@
                     <label for="group">Grup Pengguna</label>
                     <select name="group_id" id="group" class="form-control">
                       @foreach ($userGroups as $group)
-                          <option value="{{ $group->id }}" {{ $group->id == old('group_id',
-                            isset($data['group_id']) ? $data['group_id'] : 0) ? 'selected' : '' }}>{{ $group->name }}</option>
+                        <option value="{{ $group->id }}"
+                          {{ $group->id == old('group_id', isset($data['group_id']) ? $data['group_id'] : 0) ? 'selected' : '' }}>
+                          {{ $group->name }}</option>
                       @endforeach
                     </select>
                     @error('group_id')
@@ -71,7 +57,10 @@
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary"><i class="fa fa-save mr-1"></i>Simpan</button>
+                  <button type="submit" class="btn btn-primary mr-2"><i class="fa fa-check mr-1"></i> Simpan</button>
+                  <button type="reset" class="btn btn-warning" onclick="return confirm('Anda yakin?')">
+                    <i class="fa fa-xmark mr-1"></i> Reset
+                  </button>
                 </div>
               </form>
             </div>
