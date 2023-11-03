@@ -1,4 +1,3 @@
-
 @extends('admin._layouts.main')
 @section('title', $title = isset($data['id']) ? 'Edit Pengguna' : 'Tambah Pengguna')
 @include('admin._components.datatable-styles')
