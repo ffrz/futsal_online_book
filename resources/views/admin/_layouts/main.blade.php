@@ -10,7 +10,10 @@
   @yield('headstyles')
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
-  @vite(['resources/css/admin.css'])
+  <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+  <link rel="stylesheet" href="{{ mix('/resources/css/admin.css') }}">
+  @vite([])
 </head>
 
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed layout-footer-fixed dropdown-legacy">
@@ -21,15 +24,17 @@
     <footer class="main-footer">
       <strong>&copy; 2023 <a href="https://shiftech.com">Shift IT Solution</a>.</strong>
       <div class="float-right d-none d-sm-inline-block">
-        FutsalRentApp <b>V</b> 1.0.0
+        FutsalRentApp V 1.0.0
       </div>
     </footer>
   </div>
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+  <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
   @yield('footscripts')
   <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+  <script src="{{ mix('/resources/js/admin.js') }}"></script>
   <script>
     @if ($msg = session('flash-message'))
       toastr.options = {

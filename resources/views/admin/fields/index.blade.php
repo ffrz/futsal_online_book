@@ -1,29 +1,17 @@
-<?php $title = 'Daftar Lapangan'; ?>
 @extends('admin._layouts.main')
-@section('title', $title)
+@section('title', $title = 'Lapangan')
 @include('admin._components.datatable-styles')
 @section('content')
   <div class="content-wrapper">
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>{{ $title }}</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item active">{{ $title }}</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
+    @include('admin._components.content-header', [
+        'title' => $title,
+        'breadcrumbItems' => ['home', 'fields.index'],
+    ])
     <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card">
+            <div class="card with-border-top">
               <div class="card-header">
                 <a href="{{ route('admin.fields.add') }}" class="btn btn-primary">Tambah</a>
               </div>
@@ -32,22 +20,45 @@
                   <table id="example" class="display table table-bordered table-striped table-hover" style="width:100%">
                     <thead>
                       <tr>
-                        <th>Nama Lapangan</th>
-                        <th>Cover</th>
+                        <th>Lapangan</th>
+                        <th>Harga</th>
+                        <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       @foreach ($fields as $item)
                         <tr>
-                          <td><a href="{{ route('admin.fields.edit', $item->id) }}">{{ $item->name }}</a></td>
-                          <td><img src="{{ asset('storage/fields/' . $item->cover) }}" alt="" width="150px"></td>
+                          <td>
+                            <div><a href="{{ route('admin.fields.edit', $item->id) }}">{{ $item->name }}</a></div>
+                            <div><img src="{{ asset('storage/fields/' . $item->cover) }}" alt="" width="150px">
+                            </div>
+                          </td>
+                          <td>
+                            Tarif Dasar: @formatNumber($item->fixed_price)
+                            <br>
+                            Tarif berdasarkan jam:
+                            <ul>
+                              @foreach ($item->prices as $item)
+                                <li>{{ str_pad($item->hour, 2, '0', STR_PAD_LEFT) }} = @formatNumber($item->price)</li>
+                              @endforeach
+                            </ul>
+                          </td>
+                          <td>
+                            <form method="post" action="{{ route('admin.fields.delete') }}"
+                              onsubmit="return confirmDelete(this);">
+                              @csrf
+                              <input type="hidden" name="id" value="{{ $item->id }}">
+                              <button class="btn btn-danger" type="submit"><i class="fa fa-trash mr-2"></i>Hapus</button>
+                            </form>
+                          </td>
                         </tr>
                       @endforeach
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Nama Grup</th>
-                        <th>Jumlah Pengguna</th>
+                        <th>Lapangan</th>
+                        <th>Harga</th>
+                        <th>Aksi</th>
                       </tr>
                     </tfoot>
                   </table>

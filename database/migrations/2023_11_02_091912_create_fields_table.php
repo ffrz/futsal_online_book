@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100)->unique();
             $table->string('cover', 255)->default('');
+            $table->decimal('fixed_price', 10, 0, true);
             $table->softDeletes();
             $table->timestamps();
         });

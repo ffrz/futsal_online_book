@@ -1,31 +1,17 @@
-<?php $title = isset($data['id']) ? 'Edit Lapangan' : 'Tambah Lapangan'; ?>
 @extends('admin._layouts.main')
-@section('title', $title)
+@section('title', $title = isset($data['id']) ? 'Edit Lapangan' : 'Tambah Lapangan')
 @include('admin._components.datatable-styles')
 @section('content')
   <div class="content-wrapper">
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>{{ $title }}</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('admin.fields.index') }}">Lapangan</a></li>
-              <li class="breadcrumb-item active">{{ $title }}</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
+    @include('admin._components.content-header', [
+        'title' => $title,
+        'breadcrumbItems' => ['home', 'fields.index', empty($data['id']) ? 'fields.add' : 'fields.edit'],
+    ])
     <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card card-primary">
-              <div class="card-header"></div>
+            <div class="card with-border-top">
               <form method="post" action="{{ route('admin.fields.save') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" value="{{ isset($data['id']) ? $data['id'] : 0 }}">
@@ -39,6 +25,39 @@
                     @enderror()
                   </div>
                   <div class="form-group">
+                    <label for="fixed_price">Harga Sewa Per Jam</label>
+                    <input type="number" min="0" max="9999999" step="10000" class="form-control"
+                      name="fixed_price" id="fixed_price" placeholder="Harga Dasar"
+                      value="{{ old('fixed_price', isset($data['fixed_price']) ? $data['fixed_price'] : '') }}">
+                    @error('fixed_price')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    <div>
+                      <p class="text-muted font-italic">Anda bisa mengatur harga berdasarkan jam tertentu.</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <td></td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php $old_prices = old('prices', []); ?>
+                        @for ($i = 0; $i < 23; $i++)
+                          <tr>
+                            <td>{{ $i }}</td>
+                            <td><input type="number" name="prices[{{ $i }}]"
+                                value="{{ isset($old_prices[$i]) ? $old_prices[$i] : 0 }}" class="text-right"
+                                min="0" max="9999999"></td>
+                          </tr>
+                        @endfor
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="form-group">
+                    <label for="cover">Foto</label>
                     <div class="input-group">
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="cover" name="cover"
@@ -46,13 +65,15 @@
                         <label class="custom-file-label" for="cover">Choose file</label>
                       </div>
                     </div>
-                    <img class="my-3" style="border:2px solid #888;width:350px;height:350px;" id="image-preview"
-                      src="{{ isset($data['cover']) ? asset('storage/fields/' . $data['cover']) : '' }}" alt=""
-                      width="350px">
+                    <img class="my-3" style="width:350px;height:350px;" id="image-preview"
+                      src="{{ isset($data['cover']) ? asset('storage/fields/' . $data['cover']) : asset('asset/img/no-image.png') }}"
+                      alt="" width="350px">
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary"><i class="fa fa-save mr-1"></i> Simpan</button>
+                  <button type="submit" class="btn btn-primary mr-2"><i class="fa fa-check mr-1"></i> Simpan</button>
+                  <a href="{{ route('admin.fields.index') }}" class="btn btn-default"><i class="fa fa-xmark mr-1"></i>
+                    Batal</a>
                 </div>
               </form>
             </div>

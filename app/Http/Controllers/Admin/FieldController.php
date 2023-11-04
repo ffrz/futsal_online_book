@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Field;
+use App\Models\FieldPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -32,7 +33,7 @@ class FieldController extends Controller
     public function save(Request $request)
     {
         $id = (int)$request->id;
-        $data = $request->only('id', 'name');
+        $data = $request->only('id', 'name', 'fixed_price');
 
         $validator = Validator::make($data, [
             'name' => 'required|unique:fields,name,' . $id . '|max:100',
@@ -49,6 +50,13 @@ class FieldController extends Controller
         DB::transaction(function () use ($id, $request, $data) {
             if (!$id) {
                 $field = Field::create($data);
+                for ($i = 0; $i <= 23; $i++) {
+                    FieldPrice::create([
+                        'field_id' => $field->id,
+                        'hour' => $i,
+                        'price' => $data['fixed_price'],
+                    ]);
+                }
             } else {
                 $field = Field::findOrFail($id);
                 $field->update($data);
@@ -69,11 +77,15 @@ class FieldController extends Controller
         });
 
         return redirect(route('admin.fields.index'))
-            ->with('flash-message', ['info', 'Lapangan telah diperbarui', 'Sukses']);
+            ->with('flash-message', ['info', 'Lapangan telah diperbarui.', 'Sukses']);
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
+        $field = Field::findOrFail($request->id);
+        $field->delete();
+        return redirect(route('admin.fields.index'))
+            ->with('flash-message', ['warning', 'Lapangan telah dihapus.', 'Sukses']);
     }
 
     public function restore($id)

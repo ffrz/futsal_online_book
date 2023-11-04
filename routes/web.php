@@ -66,5 +66,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('add', 'add')->name('admin.fields.add');
         Route::get('edit/{id}', 'edit')->name('admin.fields.edit');
         Route::post('save', 'save')->name('admin.fields.save');
+        Route::post('delete', 'delete')->name('admin.fields.delete');
     });
 });
