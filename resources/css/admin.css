@@ -7,10 +7,11 @@ hr.nav-separator {
     background-color: #5a5a5a;
 }
 
-.card-header {
-    padding: 0.1rem 0;
+.breadcrumb>li:last-child a
+{
+    color: #495057;
 }
 
-.card-header>* {
-    margin:0.75rem 1.25rem;
+.card.with-border-top {
+    border-top: 3px solid #007bff;
 }
